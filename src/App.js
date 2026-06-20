@@ -4,6 +4,8 @@ import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react
 import ChatApp from './functionality/aichat.jsx';
 import Functionality from './functionality/funchome.jsx';
 import Pricing from './user/pricing.js';
+import Dashboard from './functionality/dashboard.jsx';
+import ContentScheduler from './functionality/contentscheduler.jsx';
  
 /* ─── Nav ─── */
 function Nav() {
@@ -229,7 +231,7 @@ function Home() {
         <p>© 2026 Optimos. All rights reserved.</p>
         <nav className="footer__links">
           {['Privacy', 'Terms', 'Blog', 'About'].map(l => (
-            <a key={l} href="#">{l}</a>
+            <button key={l} style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', textDecoration: 'none', fontSize: 'inherit' }}>{l}</button>
           ))}
         </nav>
       </footer>
@@ -271,6 +273,8 @@ export default function App() {
   <Route path="/pricing"   element={<Pricing />} />
   <Route path="/aichat"   element={<ChatApp />} />
         <Route path="/funchome" element={<Functionality />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/contentscheduler" element={<ContentScheduler />} />
         <Route path="/contact"  element={<Contact />} />
       </Routes>
     </Router>

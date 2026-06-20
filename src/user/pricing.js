@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './pricing.css';
  
 /* ─── DATA ─── */
@@ -243,7 +243,7 @@ export default function Pricing() {
         <p>© 2026 Optimos. All rights reserved.</p>
         <nav className="footer__links">
           {['Privacy', 'Terms', 'Blog', 'Contact'].map(l => (
-            <a key={l} href="#">{l}</a>
+            <button key={l} style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', textDecoration: 'none', fontSize: 'inherit' }}>{l}</button>
           ))}
         </nav>
       </footer>
