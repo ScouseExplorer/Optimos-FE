@@ -7,6 +7,7 @@ import Pricing from './user/pricing.js';
 import Dashboard from './functionality/dashboard.jsx';
 import Settings from './functionality/settings.jsx';
 import ContentScheduler from './functionality/contentscheduler.jsx';
+import AdminDashboard from'./admin/admindashboard.jsx';
  
 /* ─── Nav ─── */
 function Nav() {
@@ -21,6 +22,7 @@ function Nav() {
         <li><a href="#why">Why us</a></li>
         <li><a href="#contact">Contact</a></li>
         <li><Link to="/aichat" className="nav__cta">Get started</Link></li>
+        <li><Link to="/admin">Admin</Link></li>
       </ul>
     </nav>
   );
@@ -276,6 +278,7 @@ export default function App() {
         <Route path="/funchome" element={<Functionality />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/contentscheduler" element={<ContentScheduler />} />
+        <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/contact"  element={<Contact />} />
         <Route path="/settings" element={<Settings/>} />
       </Routes>
