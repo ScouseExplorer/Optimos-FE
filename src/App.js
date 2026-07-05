@@ -5,6 +5,7 @@ import ChatApp from './functionality/aichat.jsx';
 import Functionality from './functionality/funchome.jsx';
 import Pricing from './user/pricing.js';
 import Dashboard from './functionality/dashboard.jsx';
+import Settings from './functionality/settings.jsx';
 import ContentScheduler from './functionality/contentscheduler.jsx';
  
 /* ─── Nav ─── */
@@ -276,6 +277,7 @@ export default function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/contentscheduler" element={<ContentScheduler />} />
         <Route path="/contact"  element={<Contact />} />
+        <Route path="/settings" element={<Settings/>} />
       </Routes>
     </Router>
   );
