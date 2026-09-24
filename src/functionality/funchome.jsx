@@ -1,22 +1,65 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import './funchome.css';
+import InternalAppShell from '../layout/InternalAppShell.jsx';
 
+const MODULES = [
+    {
+        title: 'Performance Dashboard',
+        description: 'Track profile reach, engagement, and growth trends in one place.',
+        route: '/dashboard',
+        badge: 'Live',
+    },
+    {
+        title: 'Content Scheduler',
+        description: 'Plan, draft, and schedule posts with queue controls and calendar view.',
+        route: '/contentscheduler',
+        badge: 'Core',
+    },
+    {
+        title: 'AI Chat Assistant',
+        description: 'Generate hooks, rewrite posts, and brainstorm strategy prompts quickly.',
+        route: '/aichat',
+        badge: 'Beta',
+    },
+    {
+        title: 'Account Settings',
+        description: 'Manage profile details, notifications, integrations, and security.',
+        route: '/settings',
+        badge: 'Admin',
+    },
+];
 
+export default function Functionality() {
+    const navigate = useNavigate();
 
-const User = () => {
     return (
-        <><main className="user-page" style={{ padding: 20 }}>
-            <header className="user-header">
-                <h1>User Page</h1>
-            </header>
+        <InternalAppShell title="Profile" activeNav="profile">
+            <main className="funchome-page">
+                <header className="funchome-hero">
+                    <p className="funchome-kicker">Workspace</p>
+                    <h1>Welcome to your Optimos app</h1>
+                    <p>
+                        Everything below is connected to real routes so you can move through the platform
+                        as a product, not a static presentation.
+                    </p>
+                </header>
 
-            <section className="user-content">
-                <p>Welcome — this is a starter page. Replace this with your components.</p>
-            </section>
-        </main><div>
-        PLEASE ADD YOUR LINKEDIN STRATEGY CONTENT HERE  
-
-        </div></>
+                <section className="funchome-grid" aria-label="App modules">
+                    {MODULES.map(module => (
+                        <article key={module.title} className="funchome-card">
+                            <div className="funchome-card__top">
+                                <h2>{module.title}</h2>
+                                <span>{module.badge}</span>
+                            </div>
+                            <p>{module.description}</p>
+                            <button onClick={() => navigate(module.route)} className="funchome-card__cta">
+                                Open module
+                            </button>
+                        </article>
+                    ))}
+                </section>
+            </main>
+        </InternalAppShell>
     );
-};
-
-export default User;
+}

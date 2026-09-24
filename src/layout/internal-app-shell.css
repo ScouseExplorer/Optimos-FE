@@ -1,0 +1,250 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600&display=swap');
+
+:root {
+  --app-bg: #eef6ff;
+  --app-surface: #ffffff;
+  --app-surface-2: rgba(37, 99, 235, 0.08);
+  --app-border: rgba(37, 99, 235, 0.22);
+  --app-text: #17325c;
+  --app-muted: rgba(23, 50, 92, 0.68);
+  --app-cyan: #0ea5e9;
+  --app-violet: #2563eb;
+  --app-pink: #f97316;
+  --app-sidebar-w: 240px;
+}
+
+.internal-shell {
+  min-height: 100vh;
+  display: flex;
+  background: var(--app-bg);
+  color: var(--app-text);
+  font-family: 'DM Sans', sans-serif;
+}
+
+.internal-shell__sidebar {
+  width: var(--app-sidebar-w);
+  border-right: 1px solid var(--app-border);
+  background: var(--app-surface);
+  padding: 1rem .85rem;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.internal-shell__logo {
+  display: inline-flex;
+  align-items: center;
+  gap: .6rem;
+  text-decoration: none;
+  color: inherit;
+  padding: .35rem .2rem;
+}
+
+.internal-shell__logo-mark {
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  display: grid;
+  place-items: center;
+  font-family: 'Bebas Neue', sans-serif;
+  letter-spacing: .05em;
+  color: #050509;
+  background: linear-gradient(130deg, var(--app-cyan), var(--app-violet));
+}
+
+.internal-shell__logo-text {
+  font-family: 'Bebas Neue', sans-serif;
+  letter-spacing: .13em;
+  font-size: 1.2rem;
+}
+
+.internal-shell__nav {
+  display: flex;
+  flex-direction: column;
+  gap: .25rem;
+}
+
+.internal-shell__nav-link {
+  display: flex;
+  align-items: center;
+  gap: .65rem;
+  padding: .55rem .65rem;
+  border-radius: 10px;
+  color: var(--app-muted);
+  text-decoration: none;
+  font-size: .88rem;
+  border: 1px solid transparent;
+}
+
+.internal-shell__nav-link:hover {
+  color: #17325c;
+  background: var(--app-surface-2);
+}
+
+.internal-shell__nav-link--active {
+  color: #17325c;
+  background: rgba(37, 99, 235, 0.18);
+  border-color: rgba(37, 99, 235, 0.35);
+}
+
+.internal-shell__badge {
+  margin-left: auto;
+  font-size: .62rem;
+  background: var(--app-pink);
+  border-radius: 999px;
+  padding: .12rem .44rem;
+  color: #17325c;
+}
+
+.internal-shell__main-wrap {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.internal-shell__topbar {
+  height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+  border-bottom: 1px solid var(--app-border);
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(14px);
+  position: sticky;
+  top: 0;
+  z-index: 40;
+}
+
+.internal-shell__topbar h1 {
+  margin: 0;
+  font-family: 'Bebas Neue', sans-serif;
+  letter-spacing: .08em;
+  font-size: 1.45rem;
+  font-weight: 400;
+}
+
+.internal-shell__menu-btn,
+.internal-shell__icon-btn,
+.internal-shell__drawer-top button {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  border: 1px solid var(--app-border);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--app-muted);
+  cursor: pointer;
+}
+
+.internal-shell__menu-btn:hover,
+.internal-shell__icon-btn:hover,
+.internal-shell__drawer-top button:hover {
+  color: #17325c;
+}
+
+.internal-shell__topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+}
+
+.internal-shell__notif-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--app-pink);
+  position: absolute;
+  margin-left: 13px;
+  margin-top: -13px;
+  border: 2px solid var(--app-surface);
+}
+
+.internal-shell__avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: .72rem;
+  font-weight: 600;
+  background: linear-gradient(130deg, var(--app-violet), var(--app-pink));
+}
+
+.internal-shell__content {
+  flex: 1;
+  min-height: 0;
+}
+
+.internal-shell__drawer,
+.internal-shell__backdrop {
+  display: none;
+}
+
+@media (max-width: 920px) {
+  .internal-shell__sidebar {
+    display: none;
+  }
+
+  .internal-shell__menu-btn {
+    display: grid;
+  }
+
+  .internal-shell__drawer {
+    display: block;
+    position: fixed;
+    inset: 0 auto 0 0;
+    width: min(280px, 82vw);
+    background: var(--app-surface);
+    border-right: 1px solid var(--app-border);
+    z-index: 80;
+    transform: translateX(-102%);
+    transition: transform .24s ease;
+    padding: .85rem;
+  }
+
+  .internal-shell__drawer--open {
+    transform: translateX(0);
+  }
+
+  .internal-shell__drawer-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: .8rem;
+  }
+
+  .internal-shell__drawer-top span {
+    font-size: .85rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--app-muted);
+  }
+
+  .internal-shell__backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, .46);
+    z-index: 70;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .2s;
+  }
+
+  .internal-shell__backdrop--open {
+    opacity: 1;
+    pointer-events: all;
+  }
+}
+
+@media (min-width: 921px) {
+  .internal-shell__menu-btn {
+    display: none;
+  }
+}

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
 import { Chart, registerables } from 'chart.js';
 import './dashboard.css';
+import InternalAppShell from '../layout/InternalAppShell.jsx';
 
 Chart.register(...registerables);
 
@@ -54,39 +54,6 @@ const SUGGESTIONS = [
   { icon:'💡', iconBg:'rgba(255,190,11,.12)', iconBorder:'rgba(255,190,11,.25)', title:'Add 5 more skills',  desc:'Profiles with 10+ skills get 4× more views' },
   { icon:'✨', iconBg:'rgba(0,245,212,.10)',  iconBorder:'rgba(0,245,212,.25)',  title:'Rewrite your About', desc:'Yours is too short — aim for 250+ words' },
 ];
-
-const NAV_ITEMS = [
-  { icon:'grid',    label:'Dashboard',   route:'/',           active:true },
-  { icon:'user',    label:'Profile',     route:'/profile' },
-  { icon:'edit',    label:'Content',     route:'/content',    badge:3 },
-  { icon:'chart',   label:'Analytics',  route:'/analytics' },
-  { icon:'users',   label:'Connections', route:'/connections' },
-];
-
-const TOOL_ITEMS = [
-  { icon:'radio',    label:'AI Chat',    route:'/aichat' },
-  { icon:'calendar', label:'Scheduler',  route:'/scheduler' },
-];
-
-const ACCOUNT_ITEMS = [
-  { icon:'settings', label:'Settings', route:'/settings' },
-];
-
-/* ══════════════════════════════════════════
-   SVG ICONS
-══════════════════════════════════════════ */
-
-const ICONS = {
-  grid:     <svg className="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>,
-  user:     <svg className="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>,
-  edit:     <svg className="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>,
-  chart:    <svg className="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>,
-  users:    <svg className="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>,
-  radio:    <svg className="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14"/></svg>,
-  calendar: <svg className="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>,
-  settings: <svg className="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>,
-  bell:     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" strokeWidth="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg>,
-};
 
 /* ══════════════════════════════════════════
    REACH CHART HOOK
@@ -203,54 +170,6 @@ function useDonutChart(canvasRef) {
 /* ══════════════════════════════════════════
    SUB-COMPONENTS
 ══════════════════════════════════════════ */
-
-function TopNav() {
-  return (
-    <div className="topnav">
-      <span className="topnav__logo">lynx<span>strat</span></span>
-      <div className="topnav__right">
-        <div className="notif-btn">
-          {ICONS.bell}
-          <span className="notif-btn__dot" />
-        </div>
-        <div className="avatar">AM</div>
-      </div>
-    </div>
-  );
-}
-
-function Sidebar() {
-  const navigate = useNavigate();
-  return (
-    <aside className="sidebar">
-      {NAV_ITEMS.map(({ icon, label, route, active, badge }) => (
-        <button
-          key={label}
-          className={`nav-item${active ? ' nav-item--active' : ''}`}
-          onClick={() => navigate(route)}
-        >
-          {ICONS[icon]}
-          {label}
-          {badge && <span className="nav-item__badge">{badge}</span>}
-        </button>
-      ))}
-
-      <div className="sidebar__section">Tools</div>
-      {TOOL_ITEMS.map(({ icon, label, route }) => (
-        <button key={label} className="nav-item" onClick={() => navigate(route)}>
-          {ICONS[icon]}{label}
-        </button>
-      ))}
-
-      <div className="sidebar__section">Account</div>
-      {ACCOUNT_ITEMS.map(({ icon, label, route }) => (
-        <button key={label} className="nav-item" onClick={() => navigate(route)}>
-          {ICONS[icon]}{label}
-        </button>
-      ))}
-    </aside>
-  );
-}
 
 function StatCards() {
   return (
@@ -441,31 +360,27 @@ function ProfileScore() {
 
 export default function Dashboard() {
   return (
-    <>
-      <TopNav />
-      <div className="shell">
-        <Sidebar />
-        <main className="main">
-          <div className="greeting">
-            <h1 className="greeting__title">
-              GOOD MORNING, <span>ALEX</span>
-            </h1>
-            <p className="greeting__sub">Here's your LinkedIn performance for the last 30 days.</p>
-          </div>
+    <InternalAppShell title="Dashboard" activeNav="dashboard">
+      <main className="dashboard-main">
+        <div className="greeting">
+          <h1 className="greeting__title">
+            GOOD MORNING, <span>ALEX</span>
+          </h1>
+          <p className="greeting__sub">Here's your LinkedIn performance for the last 30 days.</p>
+        </div>
 
-          <StatCards />
+        <StatCards />
 
-          <div className="charts-row">
-            <ReachChart />
-            <ContentMixChart />
-          </div>
+        <div className="charts-row">
+          <ReachChart />
+          <ContentMixChart />
+        </div>
 
-          <div className="bottom-row">
-            <UpcomingPosts />
-            <ProfileScore />
-          </div>
-        </main>
-      </div>
-    </>
+        <div className="bottom-row">
+          <UpcomingPosts />
+          <ProfileScore />
+        </div>
+      </main>
+    </InternalAppShell>
   );
 }

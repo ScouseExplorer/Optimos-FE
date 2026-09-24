@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./settings.css";
+import InternalAppShell from "../layout/InternalAppShell.jsx";
 
 // ── Icons (inline SVG to keep zero-dependency) ──────────────────────────────
 const Icon = ({ name }) => {
@@ -237,19 +238,6 @@ export default function Settings() {
   // ── Danger state ──
   const [deleteInput, setDeleteInput] = useState("");
 
-  const [activeNav] = useState("settings");
-
-  const navItems = [
-    { id: "dashboard",   label: "Dashboard"   },
-    { id: "profile",     label: "Profile"     },
-    { id: "content",     label: "Content"     },
-    { id: "analytics",   label: "Analytics"   },
-    { id: "connections", label: "Connections" },
-    { id: "aichat",      label: "AI Chat"     },
-    { id: "scheduler",   label: "Scheduler"   },
-    { id: "settings",    label: "Settings"    },
-  ];
-
   const settingsNav = [
     { href: "#account",       label: "Account"       },
     { href: "#security",      label: "Security"      },
@@ -260,47 +248,8 @@ export default function Settings() {
   ];
 
   return (
-    <div className="app-shell">
-      {/* ── Sidebar ─────────────────────────────────────────────────── */}
-      <aside className="sidebar">
-        <div className="sidebar__logo">
-          <span className="logo-mark">LX</span>
-          <span className="logo-name">lynxstrat</span>
-        </div>
-        <nav className="sidebar__nav">
-          {navItems.map((item) => (
-            <a
-              key={item.id}
-              href="#"
-              className={`sidebar__link ${activeNav === item.id ? "sidebar__link--active" : ""}`}
-            >
-              <Icon name={item.id} />
-              <span>{item.label}</span>
-            </a>
-          ))}
-        </nav>
-        <div className="sidebar__footer">
-          <div className="sidebar__avatar">AM</div>
-          <div className="sidebar__user">
-            <span className="sidebar__user-name">Alex Morgan</span>
-            <span className="sidebar__user-plan">Pro plan</span>
-          </div>
-        </div>
-      </aside>
-
-      {/* ── Main area ───────────────────────────────────────────────── */}
-      <div className="main-area">
-        {/* Top nav */}
-        <header className="topnav">
-          <div className="topnav__left">
-            <h1 className="topnav__title">Settings</h1>
-          </div>
-          <div className="topnav__right">
-            <button className="topnav__avatar">AM</button>
-          </div>
-        </header>
-
-        {/* Content */}
+    <InternalAppShell title="Settings" activeNav="settings">
+      <div className="settings-page">
         <div className="settings-layout">
           {/* In-page nav */}
           <aside className="settings-subnav">
@@ -661,6 +610,6 @@ export default function Settings() {
           </div>
         </div>
       </div>
-    </div>
+    </InternalAppShell>
   );
 }

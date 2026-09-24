@@ -1,0 +1,260 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&display=swap');
+
+.chat-key-screen,
+.chat-app {
+  font-family: 'DM Sans', sans-serif;
+}
+
+.chat-key-screen {
+  min-height: 100%;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: #f3f5fb;
+}
+
+.chat-key-card {
+  width: min(460px, 100%);
+  background: #fff;
+  border-radius: 14px;
+  border: 1px solid #dde1ec;
+  padding: 1.3rem;
+}
+
+.chat-key-card h2 {
+  margin: 0 0 .6rem;
+  font-size: 1.4rem;
+}
+
+.chat-key-card p {
+  margin: 0 0 .9rem;
+  color: #495169;
+  line-height: 1.5;
+}
+
+.chat-key-card a {
+  color: #195de0;
+}
+
+.chat-key-input {
+  width: 100%;
+  border: 1px solid #c6cede;
+  border-radius: 10px;
+  padding: .7rem .8rem;
+  margin-bottom: .8rem;
+}
+
+.chat-key-submit {
+  width: 100%;
+  border: none;
+  background: #0f9f7f;
+  color: #17325c;
+  border-radius: 10px;
+  padding: .7rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.chat-app {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #eef2f8;
+}
+
+.chat-header {
+  border-bottom: 1px solid #dde2ee;
+  background: #ffffff;
+}
+
+.chat-header__inner {
+  max-width: 1024px;
+  margin: 0 auto;
+  padding: .9rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chat-header__inner h1 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.chat-header__btn {
+  border: 1px solid #cad3e6;
+  background: #f8faff;
+  border-radius: 8px;
+  padding: .45rem .7rem;
+  cursor: pointer;
+}
+
+.chat-messages {
+  flex: 1;
+  max-width: 1024px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 1rem;
+  overflow-y: auto;
+}
+
+.chat-empty {
+  text-align: center;
+  color: #6a738d;
+  margin-top: 18vh;
+}
+
+.chat-empty__icon {
+  width: 42px;
+  height: 42px;
+  margin: 0 auto .6rem;
+}
+
+.chat-row {
+  display: flex;
+  margin-bottom: .75rem;
+}
+
+.chat-row--user {
+  justify-content: flex-end;
+}
+
+.chat-row--bot {
+  justify-content: flex-start;
+}
+
+.chat-bubble {
+  max-width: min(720px, 90%);
+  border-radius: 12px;
+  border: 1px solid #d9dfed;
+  padding: .6rem .7rem;
+}
+
+.chat-bubble--user {
+  background: #0f9f7f;
+  color: #17325c;
+  border-color: #0f9f7f;
+}
+
+.chat-bubble--bot {
+  background: #fff;
+  color: #212843;
+}
+
+.chat-bubble__inner {
+  display: flex;
+  align-items: flex-start;
+  gap: .45rem;
+}
+
+.chat-icon {
+  width: 16px;
+  height: 16px;
+  margin-top: .18rem;
+  flex-shrink: 0;
+}
+
+.chat-content__text {
+  margin: 0;
+  white-space: pre-wrap;
+  line-height: 1.45;
+  font-size: .92rem;
+}
+
+.chat-content__time {
+  margin: .35rem 0 0;
+  font-size: .72rem;
+  opacity: .75;
+}
+
+.chat-content__time--user {
+  color: #dcffee;
+}
+
+.chat-content__time--bot {
+  color: #6b7692;
+}
+
+.chat-loader {
+  display: inline-flex;
+  gap: .25rem;
+  align-items: center;
+  padding: .25rem 0;
+}
+
+.chat-loader span {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #8692af;
+  animation: chat-bounce 1s ease-in-out infinite;
+}
+
+.chat-loader span:nth-child(2) {
+  animation-delay: .12s;
+}
+
+.chat-loader span:nth-child(3) {
+  animation-delay: .24s;
+}
+
+.chat-input-wrap {
+  border-top: 1px solid #dde2ee;
+  background: #fff;
+}
+
+.chat-input-row {
+  max-width: 1024px;
+  margin: 0 auto;
+  padding: .9rem 1rem;
+  display: flex;
+  gap: .55rem;
+  align-items: center;
+}
+
+.chat-input-box {
+  flex: 1;
+}
+
+.chat-textarea {
+  width: 100%;
+  border: 1px solid #cad3e6;
+  border-radius: 12px;
+  resize: vertical;
+  padding: .7rem .85rem;
+  font-family: inherit;
+}
+
+.chat-send {
+  width: 43px;
+  height: 43px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  border: none;
+}
+
+.chat-send svg {
+  width: 18px;
+  height: 18px;
+}
+
+.chat-send--active {
+  background: #0f9f7f;
+  color: #17325c;
+  cursor: pointer;
+}
+
+.chat-send--disabled {
+  background: #d6deec;
+  color: #7d88a7;
+}
+
+@keyframes chat-bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}

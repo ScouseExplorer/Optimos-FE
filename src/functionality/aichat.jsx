@@ -1,12 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Send, Bot, User } from 'lucide-react';
+import './aichat.css';
+import InternalAppShell from '../layout/InternalAppShell.jsx';
 
 const ChatApp = () => {
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [apiKey, setApiKey] = useState('');
-  const [showApiKeyInput, setShowApiKeyInput] = useState(true);
+  const [apiKey, setApiKey] = useState(localStorage.getItem('optimos_openai_key') || '');
+  const [showApiKeyInput, setShowApiKeyInput] = useState(!localStorage.getItem('optimos_openai_key'));
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -44,7 +46,7 @@ const ChatApp = () => {
           'Authorization': `Bearer ${apiKey}`
         },
         body: JSON.stringify({
-          model: 'gpt-3.5-turbo',
+          model: 'gpt-4o-mini',
           messages: [{ role: 'user', content: inputValue }],
           max_tokens: 500
         })
@@ -86,141 +88,143 @@ const ChatApp = () => {
 
   const saveApiKey = () => {
     if (apiKey.trim()) {
+      localStorage.setItem('optimos_openai_key', apiKey.trim());
       setShowApiKeyInput(false);
     }
   };
 
   if (showApiKeyInput) {
     return (
-      <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
-        <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">Enter OpenAI API Key</h2>
-          <p className="text-gray-600 mb-4">
-            You need an OpenAI API key to use this chat app. Get one from{' '}
-            <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">
-              OpenAI's website
-            </a>
-          </p>
-          <input
-            type="password"
-            value={apiKey}
-            onChange={(e) => setApiKey(e.target.value)}
-            placeholder="sk-..."
-            className="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          <button
-            onClick={saveApiKey}
-            className="w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition-colors"
-          >
-            Start Chatting
-          </button>
+      <InternalAppShell title="AI Chat" activeNav="aichat">
+        <div className="chat-key-screen">
+          <div className="chat-key-card">
+            <h2>Enter OpenAI API Key</h2>
+            <p>
+              You need an OpenAI API key to use this chat app. Get one from{' '}
+              <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener noreferrer">
+                OpenAI's website
+              </a>
+            </p>
+            <input
+              type="password"
+              value={apiKey}
+              onChange={(e) => setApiKey(e.target.value)}
+              placeholder="sk-..."
+              className="chat-key-input"
+            />
+            <button
+              onClick={saveApiKey}
+              className="chat-key-submit"
+            >
+              Start Chatting
+            </button>
+          </div>
         </div>
-      </div>
+      </InternalAppShell>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col">
-      {/* Header */}
-      <div className="bg-green-600 text-white p-4 shadow-lg">
-        <div className="flex items-center justify-between">
-          <h1 className="text-xl font-semibold">ChatGPT Assistant</h1>
-          <button
-            onClick={() => setShowApiKeyInput(true)}
-            className="text-sm bg-green-700 px-3 py-1 rounded hover:bg-green-800"
-          >
-            Change API Key
-          </button>
-        </div>
-      </div>
-
-      {/* Messages Container */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
-        {messages.length === 0 && (
-          <div className="text-center text-gray-500 mt-20">
-            <Bot className="w-12 h-12 mx-auto mb-4 text-gray-400" />
-            <p>Start a conversation with ChatGPT!</p>
+    <InternalAppShell title="AI Chat" activeNav="aichat">
+      <div className="chat-app">
+        <div className="chat-header">
+          <div className="chat-header__inner">
+            <h1>AI Strategy Assistant</h1>
+            <button
+              onClick={() => setShowApiKeyInput(true)}
+              className="chat-header__btn"
+            >
+              Change API Key
+            </button>
           </div>
-        )}
-        
-        {messages.map((message) => (
-          <div
-            key={message.id}
-            className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
-          >
+        </div>
+
+        <div className="chat-messages">
+          {messages.length === 0 && (
+            <div className="chat-empty">
+              <Bot className="chat-empty__icon" />
+              <p>Start a conversation with ChatGPT!</p>
+            </div>
+          )}
+          
+          {messages.map((message) => (
             <div
-              className={`max-w-xs lg:max-w-md xl:max-w-lg px-4 py-2 rounded-lg shadow-md relative ${
-                message.sender === 'user'
-                  ? 'bg-green-500 text-white rounded-br-none'
-                  : 'bg-white text-gray-800 rounded-bl-none'
+              key={message.id}
+              className={`chat-row ${message.sender === 'user' ? 'chat-row--user' : 'chat-row--bot'}`}
+            >
+              <div
+                className={`chat-bubble ${
+                  message.sender === 'user'
+                    ? 'chat-bubble--user'
+                    : 'chat-bubble--bot'
+                }`}
+              >
+                <div className="chat-bubble__inner">
+                  {message.sender === 'bot' && (
+                    <Bot className="chat-icon" />
+                  )}
+                  <div className="chat-content">
+                    <p className="chat-content__text">{message.text}</p>
+                    <p className={`chat-content__time ${
+                      message.sender === 'user' ? 'chat-content__time--user' : 'chat-content__time--bot'
+                    }`}>
+                      {message.timestamp}
+                    </p>
+                  </div>
+                  {message.sender === 'user' && (
+                    <User className="chat-icon" />
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
+          
+          {isLoading && (
+            <div className="chat-row chat-row--bot">
+              <div className="chat-bubble chat-bubble--bot">
+                <div className="chat-bubble__inner">
+                  <Bot className="chat-icon" />
+                  <div className="chat-loader" aria-label="Assistant is typing">
+                    <span />
+                    <span />
+                    <span />
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+          
+          <div ref={messagesEndRef} />
+        </div>
+
+        <div className="chat-input-wrap">
+          <div className="chat-input-row">
+            <div className="chat-input-box">
+              <textarea
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                onKeyPress={handleKeyPress}
+                placeholder="Type a message..."
+                className="chat-textarea"
+                rows={1}
+                style={{ minHeight: '48px', maxHeight: '120px' }}
+              />
+            </div>
+            <button
+              onClick={sendMessage}
+              disabled={!inputValue.trim() || isLoading}
+              className={`chat-send ${
+                inputValue.trim() && !isLoading
+                  ? 'chat-send--active'
+                  : 'chat-send--disabled'
               }`}
             >
-              <div className="flex items-start space-x-2">
-                {message.sender === 'bot' && (
-                  <Bot className="w-4 h-4 mt-1 text-gray-500 flex-shrink-0" />
-                )}
-                <div className="flex-1">
-                  <p className="text-sm whitespace-pre-wrap">{message.text}</p>
-                  <p className={`text-xs mt-1 ${
-                    message.sender === 'user' ? 'text-green-100' : 'text-gray-500'
-                  }`}>
-                    {message.timestamp}
-                  </p>
-                </div>
-                {message.sender === 'user' && (
-                  <User className="w-4 h-4 mt-1 text-green-100 flex-shrink-0" />
-                )}
-              </div>
-            </div>
+              <Send />
+            </button>
           </div>
-        ))}
-        
-        {isLoading && (
-          <div className="flex justify-start">
-            <div className="bg-white text-gray-800 rounded-lg rounded-bl-none px-4 py-2 shadow-md">
-              <div className="flex items-center space-x-2">
-                <Bot className="w-4 h-4 text-gray-500" />
-                <div className="flex space-x-1">
-                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-        
-        <div ref={messagesEndRef} />
-      </div>
-
-      {/* Input Area */}
-      <div className="bg-white border-t border-gray-200 p-4">
-        <div className="flex items-center space-x-2">
-          <div className="flex-1 relative">
-            <textarea
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              onKeyPress={handleKeyPress}
-              placeholder="Type a message..."
-              className="w-full p-3 pr-12 border border-gray-300 rounded-full resize-none focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
-              rows={1}
-              style={{ minHeight: '48px', maxHeight: '120px' }}
-            />
-          </div>
-          <button
-            onClick={sendMessage}
-            disabled={!inputValue.trim() || isLoading}
-            className={`p-3 rounded-full transition-colors ${
-              inputValue.trim() && !isLoading
-                ? 'bg-green-500 text-white hover:bg-green-600'
-                : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-            }`}
-          >
-            <Send className="w-5 h-5" />
-          </button>
         </div>
       </div>
-    </div>
+    </InternalAppShell>
   );
 };
 

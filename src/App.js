@@ -1,26 +1,40 @@
 import './App.css';
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import ChatApp from './functionality/aichat.jsx';
 import Functionality from './functionality/funchome.jsx';
 import Pricing from './user/pricing.js';
 import Dashboard from './functionality/dashboard.jsx';
 import Settings from './functionality/settings.jsx';
 import ContentScheduler from './functionality/contentscheduler.jsx';
+import Onboarding from './functionality/onboarding.jsx';
 import AdminDashboard from'./admin/admindashboard.jsx';
  
 /* ─── Nav ─── */
 function Nav() {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const jumpTo = sectionId => {
+    if (location.pathname === '/') {
+      const section = document.getElementById(sectionId);
+      section?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      return;
+    }
+    navigate(`/?section=${sectionId}`);
+  };
+
   return (
     <nav className="nav">
       <Link to="/" className="nav__logo">
         <span>Optimos</span>
       </Link>
       <ul className="nav__links">
-        <li><a href="#services">Services</a></li>
+        <li><button type="button" onClick={() => jumpTo('services')}>Services</button></li>
         <li><Link to="/pricing">Pricing</Link></li>
-        <li><a href="#why">Why us</a></li>
-        <li><a href="#contact">Contact</a></li>
+        <li><button type="button" onClick={() => jumpTo('why')}>Why us</button></li>
+        <li><button type="button" onClick={() => jumpTo('contact')}>Contact</button></li>
+        <li><Link to="/onboarding">Onboarding</Link></li>
         <li><Link to="/aichat" className="nav__cta">Get started</Link></li>
         <li><Link to="/admin">Admin</Link></li>
       </ul>
@@ -64,6 +78,17 @@ const SERVICES = [
 /* ─── Home page ─── */
 function Home() {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const sectionId = params.get('section');
+    if (!sectionId) return;
+
+    const section = document.getElementById(sectionId);
+    if (!section) return;
+    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, [location.search]);
  
   return (
     <>
@@ -265,23 +290,55 @@ function Contact() {
     </div>
   );
 }
+
+function NotFound() {
+  const navigate = useNavigate();
+
+  return (
+    <div className="not-found">
+      <div className="not-found__card">
+        <h1>404</h1>
+        <p>The page you requested does not exist.</p>
+        <button className="btn-grad" onClick={() => navigate('/')}>Go home</button>
+      </div>
+    </div>
+  );
+}
+
+function AppRoutes() {
+  const location = useLocation();
+  const isMarketingRoute = ['/', '/pricing', '/contact'].includes(location.pathname);
+
+  return (
+    <>
+      {isMarketingRoute && <Nav />}
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/pricing" element={<Pricing />} />
+        <Route path="/aichat" element={<ChatApp />} />
+        <Route path="/funchome" element={<Functionality />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/onboarding" element={<Onboarding />} />
+        <Route path="/contentscheduler" element={<ContentScheduler />} />
+        <Route path="/content" element={<Navigate to="/contentscheduler" replace />} />
+        <Route path="/scheduler" element={<Navigate to="/contentscheduler" replace />} />
+        <Route path="/profile" element={<Navigate to="/funchome" replace />} />
+        <Route path="/analytics" element={<Navigate to="/dashboard" replace />} />
+        <Route path="/connections" element={<Navigate to="/funchome" replace />} />
+        <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/settings" element={<Settings />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </>
+  );
+}
  
 /* ─── Root ─── */
 export default function App() {
   return (
     <Router>
-      <Nav />
-      <Routes>
-        <Route path="/"         element={<Home />} />
-  <Route path="/pricing"   element={<Pricing />} />
-  <Route path="/aichat"   element={<ChatApp />} />
-        <Route path="/funchome" element={<Functionality />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/contentscheduler" element={<ContentScheduler />} />
-        <Route path="/admin" element={<AdminDashboard />} />
-        <Route path="/contact"  element={<Contact />} />
-        <Route path="/settings" element={<Settings/>} />
-      </Routes>
+      <AppRoutes />
     </Router>
   );
 }

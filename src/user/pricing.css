@@ -1,17 +1,17 @@
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap');
+﻿@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap');
  
-/* ─── TOKENS ─── */
+/* â”€â”€â”€ TOKENS â”€â”€â”€ */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
  
 :root {
-  --bg:     #06060f;
-  --cyan:   #00f5d4;
-  --violet: #9b5de5;
-  --pink:   #f72585;
+  --bg:     #eef6ff;
+  --cyan:   #0ea5e9;
+  --violet: #2563eb;
+  --pink:   #f97316;
   --amber:  #ffbe0b;
-  --muted:  rgba(255,255,255,0.42);
-  --card:   rgba(255,255,255,0.05);
-  --border: rgba(255,255,255,0.09);
+  --muted:     rgba(23,50,92,0.68);
+  --card:    #ffffff;
+  --border:    rgba(37,99,235,0.2);
 }
  
 html { scroll-behavior: smooth; }
@@ -19,7 +19,7 @@ html { scroll-behavior: smooth; }
 body {
   font-family: 'DM Sans', sans-serif;
   background: var(--bg);
-  color: #fff;
+  color: #17325c;
   overflow-x: hidden;
   min-height: 100vh;
 }
@@ -30,23 +30,23 @@ body::after {
   position: fixed; inset: 0;
   pointer-events: none; z-index: 0;
   background:
-    radial-gradient(ellipse 55% 45% at 15% 25%, rgba(155,93,229,.16) 0%, transparent 70%),
+    radial-gradient(ellipse 55% 45% at 15% 25%, rgba(37,99,235,.16) 0%, transparent 70%),
     radial-gradient(ellipse 45% 40% at 85% 75%, rgba(0,245,212,.12) 0%, transparent 70%),
-    radial-gradient(ellipse 35% 30% at 50% 10%, rgba(247,37,133,.08) 0%, transparent 70%);
+    radial-gradient(ellipse 35% 30% at 50% 10%, rgba(249,115,22,.08) 0%, transparent 70%);
 }
  
-/* ─── ANIMATIONS ─── */
+/* â”€â”€â”€ ANIMATIONS â”€â”€â”€ */
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(20px); }
   to   { opacity: 1; transform: translateY(0); }
 }
  
-/* ─── NAV ─── */
+/* â”€â”€â”€ NAV â”€â”€â”€ */
 .nav {
   position: sticky; top: 0; z-index: 100;
   display: flex; align-items: center; justify-content: space-between;
   padding: 1.1rem 3rem;
-  background: rgba(6,6,15,0.8);
+  background: rgba(255,255,255,0.92);
   backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--border);
 }
@@ -54,7 +54,7 @@ body::after {
 .nav__logo {
   font-family: 'Bebas Neue', sans-serif;
   font-size: 1.7rem; letter-spacing: .08em;
-  color: #fff; text-decoration: none;
+  color: #17325c; text-decoration: none;
 }
 .nav__logo span { color: var(--cyan); }
  
@@ -66,7 +66,7 @@ body::after {
   text-decoration: none; letter-spacing: .05em; text-transform: uppercase;
   transition: color .2s;
 }
-.nav__links a:hover { color: #fff; }
+.nav__links a:hover { color: #17325c; }
  
 .nav__cta {
   background: linear-gradient(135deg, var(--violet), var(--pink));
@@ -76,10 +76,10 @@ body::after {
 }
 .nav__cta:hover { opacity: .85 !important; }
  
-/* ─── PAGE WRAPPER ─── */
+/* â”€â”€â”€ PAGE WRAPPER â”€â”€â”€ */
 .page { position: relative; z-index: 1; }
  
-/* ─── PRICING HERO ─── */
+/* â”€â”€â”€ PRICING HERO â”€â”€â”€ */
 .pricing-hero {
   text-align: center; padding: 6rem 2rem 3rem;
   position: relative; z-index: 1;
@@ -106,7 +106,7 @@ body::after {
   max-width: 480px; margin: 0 auto 2.5rem;
 }
  
-/* ─── BILLING TOGGLE ─── */
+/* â”€â”€â”€ BILLING TOGGLE â”€â”€â”€ */
 .toggle-wrap {
   display: inline-flex; align-items: center; gap: .75rem;
   background: rgba(255,255,255,.05); border: 1px solid var(--border);
@@ -120,7 +120,7 @@ body::after {
   transition: color .2s; white-space: nowrap;
   user-select: none;
 }
-.toggle-label--active { color: #fff; }
+.toggle-label--active { color: #17325c; }
  
 .toggle-pill {
   position: relative; width: 44px; height: 24px; cursor: pointer;
@@ -143,7 +143,7 @@ body::after {
   padding: .25rem .65rem; border-radius: 100px;
 }
  
-/* ─── PLANS GRID ─── */
+/* â”€â”€â”€ PLANS GRID â”€â”€â”€ */
 .plans {
   display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1.5rem; max-width: 1050px; margin: 0 auto; padding: 0 2rem 6rem;
@@ -153,7 +153,7 @@ body::after {
 .plans .plan:nth-child(2) { animation: fadeUp .5s ease forwards .25s; opacity: 0; }
 .plans .plan:nth-child(3) { animation: fadeUp .5s ease forwards .4s;  opacity: 0; }
  
-/* ─── PLAN CARD ─── */
+/* â”€â”€â”€ PLAN CARD â”€â”€â”€ */
 .plan {
   background: var(--card); border: 1px solid var(--border);
   border-radius: 20px; padding: 2rem;
@@ -169,24 +169,24 @@ body::after {
  
 .plan--free:hover { border-color: rgba(255,255,255,.2); }
  
-.plan--pro { border-color: rgba(155,93,229,.5); background: rgba(155,93,229,.07); }
-.plan--pro::before { background: radial-gradient(circle at 30% 20%, rgba(155,93,229,.12), transparent 60%); }
+.plan--pro { border-color: rgba(37,99,235,.5); background: rgba(37,99,235,.07); }
+.plan--pro::before { background: radial-gradient(circle at 30% 20%, rgba(37,99,235,.12), transparent 60%); }
 .plan--pro:hover::before { opacity: 1; }
  
 .plan--agency:hover { border-color: rgba(0,245,212,.4); }
 .plan--agency::before { background: radial-gradient(circle at 30% 20%, rgba(0,245,212,.07), transparent 60%); }
 .plan--agency:hover::before { opacity: 1; }
  
-/* ─── POPULAR BADGE ─── */
+/* â”€â”€â”€ POPULAR BADGE â”€â”€â”€ */
 .popular-badge {
   position: absolute; top: 1.25rem; right: 1.25rem;
   background: linear-gradient(135deg, var(--violet), var(--pink));
-  color: #fff; font-size: .62rem; font-weight: 500;
+  color: #17325c; font-size: .62rem; font-weight: 500;
   letter-spacing: .08em; text-transform: uppercase;
   padding: .3rem .75rem; border-radius: 100px;
 }
  
-/* ─── PLAN TYPOGRAPHY ─── */
+/* â”€â”€â”€ PLAN TYPOGRAPHY â”€â”€â”€ */
 .plan__name {
   font-size: .72rem; letter-spacing: .14em; text-transform: uppercase;
   color: var(--muted); font-weight: 500; margin-bottom: .75rem;
@@ -204,7 +204,7 @@ body::after {
   font-family: 'Bebas Neue', sans-serif;
   font-size: 4rem; letter-spacing: .02em; line-height: 1;
 }
-.price__amount--free   { color: #fff; }
+.price__amount--free   { color: #17325c; }
 .price__amount--pro    {
   background: linear-gradient(90deg, var(--violet), var(--pink));
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
@@ -220,7 +220,7 @@ body::after {
  
 .plan__divider { height: 1px; background: var(--border); margin: 1.5rem 0; }
  
-/* ─── FEATURES LIST ─── */
+/* â”€â”€â”€ FEATURES LIST â”€â”€â”€ */
 .features {
   list-style: none; display: flex; flex-direction: column;
   gap: .75rem; flex: 1;
@@ -234,14 +234,14 @@ body::after {
   font-size: .6rem; font-weight: 700;
 }
 .tick--free   { background: rgba(255,255,255,.1);  color: rgba(255,255,255,.5); }
-.tick--pro    { background: rgba(155,93,229,.2);   color: var(--violet); }
+.tick--pro    { background: rgba(37,99,235,.2);   color: var(--violet); }
 .tick--agency { background: rgba(0,245,212,.15);   color: var(--cyan); }
 .tick--dim    { opacity: .35; }
  
 .feature__text     { color: rgba(255,255,255,.8); }
 .feature__text--dim { color: var(--muted); }
  
-/* ─── PLAN CTA BUTTON ─── */
+/* â”€â”€â”€ PLAN CTA BUTTON â”€â”€â”€ */
 .plan__cta {
   margin-top: 2rem; width: 100%; padding: .85rem;
   border-radius: 10px; font-family: 'DM Sans', sans-serif;
@@ -250,16 +250,16 @@ body::after {
   border: none;
 }
  
-.cta--free   { background: rgba(255,255,255,.08); color: #fff; border: 1px solid var(--border); }
+.cta--free   { background: rgba(255,255,255,.08); color: #17325c; border: 1px solid var(--border); }
 .cta--free:hover { background: rgba(255,255,255,.14); }
  
-.cta--pro    { background: linear-gradient(135deg, var(--violet), var(--pink)); color: #fff; }
+.cta--pro    { background: linear-gradient(135deg, var(--violet), var(--pink)); color: #17325c; }
 .cta--pro:hover  { opacity: .85; transform: translateY(-1px); }
  
 .cta--agency { background: transparent; color: var(--cyan); border: 1px solid rgba(0,245,212,.4); }
 .cta--agency:hover { background: rgba(0,245,212,.07); }
  
-/* ─── GUARANTEE ─── */
+/* â”€â”€â”€ GUARANTEE â”€â”€â”€ */
 .guarantee {
   text-align: center; padding: 4rem 2rem 6rem;
   position: relative; z-index: 1;
@@ -276,7 +276,7 @@ body::after {
 }
 .guarantee__desc { color: var(--muted); font-size: .9rem; line-height: 1.65; max-width: 420px; margin: 0 auto; }
  
-/* ─── FAQ ─── */
+/* â”€â”€â”€ FAQ â”€â”€â”€ */
 .faq-section { border-top: 1px solid var(--border); position: relative; z-index: 1; }
 .faq-inner { max-width: 700px; margin: 0 auto; padding: 5rem 2rem; }
  
@@ -311,7 +311,7 @@ body::after {
 }
 .faq-item--open .faq-item__answer { max-height: 200px; padding-top: .75rem; }
  
-/* ─── FOOTER ─── */
+/* â”€â”€â”€ FOOTER â”€â”€â”€ */
 .footer {
   padding: 2rem 3rem; border-top: 1px solid var(--border);
   display: flex; align-items: center; justify-content: space-between;
@@ -323,7 +323,7 @@ body::after {
 .footer__links a { font-size: .78rem; color: var(--muted); text-decoration: none; transition: color .2s; }
 .footer__links a:hover { color: var(--cyan); }
  
-/* ─── RESPONSIVE ─── */
+/* â”€â”€â”€ RESPONSIVE â”€â”€â”€ */
 @media (max-width: 720px) {
   .nav { padding: 1rem 1.25rem; }
   .plans { grid-template-columns: 1fr; }

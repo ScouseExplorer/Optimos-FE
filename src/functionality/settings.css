@@ -1,29 +1,29 @@
-/* ═══════════════════════════════════════════════════════════════════════════
-   Settings.css — Optimos / lynxstrat
-   Palette: bg #06060f | cyan #00f5d4 | violet #9b5de5 | pink #f72585 | amber #ffbe0b
+﻿/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   Settings.css â€” Optimos / lynxstrat
+   Palette: bg #eef6ff | cyan #0ea5e9 | violet #2563eb | pink #f97316 | amber #ffbe0b
    Fonts:   Bebas Neue (headings) | DM Sans (body)
-═══════════════════════════════════════════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap');
 
-/* ── Tokens ──────────────────────────────────────────────────────────────── */
+/* â”€â”€ Tokens â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 :root {
-  --bg:           #06060f;
-  --bg-card:      #0d0d1f;
-  --bg-input:     #10102a;
-  --bg-hover:     #14143a;
-  --border:       rgba(255,255,255,0.07);
+  --bg:           #eef6ff;
+  --bg-card:      #ffffff;
+  --bg-input:     #f8fbff;
+  --bg-hover:     #e4efff;
+  --border:       rgba(37,99,235,0.2);
   --border-focus: rgba(0,245,212,0.4);
 
-  --cyan:         #00f5d4;
-  --violet:       #9b5de5;
-  --pink:         #f72585;
+  --cyan:         #0ea5e9;
+  --violet:       #2563eb;
+  --pink:         #f97316;
   --amber:        #ffbe0b;
   --danger:       #ff3b3b;
 
-  --text-primary:   #e8e8f0;
-  --text-secondary: #8888aa;
-  --text-muted:     #55556a;
+  --text-primary:   #17325c;
+  --text-secondary: #4f678a;
+  --text-muted:     #6f83a5;
 
   --sidebar-w: 220px;
   --topnav-h:  60px;
@@ -34,7 +34,7 @@
   --font-body: 'DM Sans', sans-serif;
 }
 
-/* ── Reset ───────────────────────────────────────────────────────────────── */
+/* â”€â”€ Reset â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
@@ -51,14 +51,14 @@ button { cursor: pointer; border: none; background: none; font-family: var(--fon
 input, select, textarea { font-family: var(--font-body); }
 svg { display: block; width: 18px; height: 18px; flex-shrink: 0; }
 
-/* ── App shell ───────────────────────────────────────────────────────────── */
+/* â”€â”€ App shell â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .app-shell {
   display: flex;
   min-height: 100vh;
   background: var(--bg);
 }
 
-/* ══ SIDEBAR ════════════════════════════════════════════════════════════════ */
+/* â•â• SIDEBAR â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .sidebar {
   width: var(--sidebar-w);
   min-height: 100vh;
@@ -163,7 +163,7 @@ svg { display: block; width: 18px; height: 18px; flex-shrink: 0; }
   place-items: center;
   font-size: 12px;
   font-weight: 600;
-  color: #fff;
+  color: #17325c;
   flex-shrink: 0;
 }
 
@@ -188,7 +188,7 @@ svg { display: block; width: 18px; height: 18px; flex-shrink: 0; }
   font-weight: 500;
 }
 
-/* ══ MAIN AREA ══════════════════════════════════════════════════════════════ */
+/* â•â• MAIN AREA â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .main-area {
   flex: 1;
   display: flex;
@@ -196,7 +196,7 @@ svg { display: block; width: 18px; height: 18px; flex-shrink: 0; }
   min-width: 0;
 }
 
-/* ── Top nav ─────────────────────────────────────────────────────────────── */
+/* â”€â”€ Top nav â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .topnav {
   height: var(--topnav-h);
   display: flex;
@@ -204,7 +204,7 @@ svg { display: block; width: 18px; height: 18px; flex-shrink: 0; }
   justify-content: space-between;
   padding: 0 28px;
   border-bottom: 1px solid var(--border);
-  background: rgba(6,6,15,0.85);
+  background: rgba(255,255,255,0.92);
   backdrop-filter: blur(12px);
   position: sticky;
   top: 0;
@@ -223,18 +223,18 @@ svg { display: block; width: 18px; height: 18px; flex-shrink: 0; }
   height: 36px;
   border-radius: 50%;
   background: linear-gradient(135deg, var(--violet), var(--pink));
-  color: #fff;
+  color: #17325c;
   font-size: 12px;
   font-weight: 600;
   display: grid;
   place-items: center;
-  border: 2px solid rgba(155,93,229,0.4);
+  border: 2px solid rgba(37,99,235,0.4);
   transition: border-color 0.2s;
 }
 
 .topnav__avatar:hover { border-color: var(--violet); }
 
-/* ── Settings layout ─────────────────────────────────────────────────────── */
+/* â”€â”€ Settings layout â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .settings-layout {
   display: flex;
   align-items: flex-start;
@@ -243,7 +243,12 @@ svg { display: block; width: 18px; height: 18px; flex-shrink: 0; }
   max-width: 1060px;
 }
 
-/* ── Sub-nav (in-page anchors) ───────────────────────────────────────────── */
+.settings-page {
+  display: flex;
+  justify-content: center;
+}
+
+/* â”€â”€ Sub-nav (in-page anchors) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .settings-subnav {
   width: 148px;
   flex-shrink: 0;
@@ -286,7 +291,7 @@ svg { display: block; width: 18px; height: 18px; flex-shrink: 0; }
   background: rgba(255,59,59,0.06);
 }
 
-/* ── Sections column ─────────────────────────────────────────────────────── */
+/* â”€â”€ Sections column â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .settings-sections {
   flex: 1;
   display: flex;
@@ -295,7 +300,7 @@ svg { display: block; width: 18px; height: 18px; flex-shrink: 0; }
   min-width: 0;
 }
 
-/* ══ SECTION CARD ═══════════════════════════════════════════════════════════ */
+/* â•â• SECTION CARD â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .settings-section {
   background: var(--bg-card);
   border: 1px solid var(--border);
@@ -328,8 +333,8 @@ svg { display: block; width: 18px; height: 18px; flex-shrink: 0; }
 .settings-section--danger { border-top: 2px solid var(--danger); }
 
 .section-icon--cyan   { background: rgba(0,245,212,0.1);  color: var(--cyan);   }
-.section-icon--violet { background: rgba(155,93,229,0.1); color: var(--violet); }
-.section-icon--pink   { background: rgba(247,37,133,0.1); color: var(--pink);   }
+.section-icon--violet { background: rgba(37,99,235,0.1); color: var(--violet); }
+.section-icon--pink   { background: rgba(249,115,22,0.1); color: var(--pink);   }
 .section-icon--amber  { background: rgba(255,190,11,0.1); color: var(--amber);  }
 .section-icon--danger { background: rgba(255,59,59,0.1);  color: var(--danger); }
 
@@ -357,7 +362,7 @@ svg { display: block; width: 18px; height: 18px; flex-shrink: 0; }
   margin-top: -4px;
 }
 
-/* ── Subsection ──────────────────────────────────────────────────────────── */
+/* â”€â”€ Subsection â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .subsection { display: flex; flex-direction: column; gap: 14px; }
 
 .subsection__title {
@@ -368,21 +373,21 @@ svg { display: block; width: 18px; height: 18px; flex-shrink: 0; }
   color: var(--text-muted);
 }
 
-/* ── Divider ─────────────────────────────────────────────────────────────── */
+/* â”€â”€ Divider â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .divider {
   height: 1px;
   background: var(--border);
   margin: 4px 0;
 }
 
-/* ── Section actions row ─────────────────────────────────────────────────── */
+/* â”€â”€ Section actions row â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .section-actions {
   display: flex;
   gap: 10px;
   padding-top: 4px;
 }
 
-/* ══ BUTTONS ═════════════════════════════════════════════════════════════════ */
+/* â•â• BUTTONS â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -406,8 +411,8 @@ svg { display: block; width: 18px; height: 18px; flex-shrink: 0; }
 }
 .btn--primary:hover { filter: brightness(1.1); }
 
-.btn--primary.btn--violet  { background: var(--violet); color: #fff; }
-.btn--primary.btn--pink    { background: var(--pink);   color: #fff; }
+.btn--primary.btn--violet  { background: var(--violet); color: #17325c; }
+.btn--primary.btn--pink    { background: var(--pink);   color: #17325c; }
 .btn--primary.btn--amber   { background: var(--amber);  color: var(--bg); }
 
 /* Ghost */
@@ -429,7 +434,7 @@ svg { display: block; width: 18px; height: 18px; flex-shrink: 0; }
   padding-left: 4px;
   padding-right: 4px;
 }
-.btn--text:hover { color: #fff; }
+.btn--text:hover { color: #17325c; }
 
 /* Danger ghost */
 .btn--danger-ghost {
@@ -445,7 +450,7 @@ svg { display: block; width: 18px; height: 18px; flex-shrink: 0; }
 /* Danger solid */
 .btn--danger {
   background: var(--danger);
-  color: #fff;
+  color: #17325c;
 }
 .btn--danger:disabled {
   background: rgba(255,59,59,0.25);
@@ -454,7 +459,7 @@ svg { display: block; width: 18px; height: 18px; flex-shrink: 0; }
 }
 .btn--danger:not(:disabled):hover { filter: brightness(1.1); }
 
-/* ══ FORM ELEMENTS ═══════════════════════════════════════════════════════════ */
+/* â•â• FORM ELEMENTS â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .field {
   display: flex;
   flex-direction: column;
@@ -551,7 +556,7 @@ svg { display: block; width: 18px; height: 18px; flex-shrink: 0; }
 
 .eye-btn:hover { color: var(--text-primary); }
 
-/* ══ TOGGLE ══════════════════════════════════════════════════════════════════ */
+/* â•â• TOGGLE â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .toggle {
   width: 42px;
   height: 24px;
@@ -586,7 +591,7 @@ svg { display: block; width: 18px; height: 18px; flex-shrink: 0; }
 .toggle--on.toggle--pink   { background: var(--pink); }
 .toggle--on.toggle--pink .toggle__thumb   { background: #fff; }
 
-/* ── Toggle row ──────────────────────────────────────────────────────────── */
+/* â”€â”€ Toggle row â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .toggle-row {
   display: flex;
   align-items: center;
@@ -611,7 +616,7 @@ svg { display: block; width: 18px; height: 18px; flex-shrink: 0; }
   color: var(--text-muted);
 }
 
-/* ══ ACCOUNT ════════════════════════════════════════════════════════════════ */
+/* â•â• ACCOUNT â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .avatar-row {
   display: flex;
   align-items: center;
@@ -627,9 +632,9 @@ svg { display: block; width: 18px; height: 18px; flex-shrink: 0; }
   place-items: center;
   font-size: 20px;
   font-weight: 600;
-  color: #fff;
+  color: #17325c;
   flex-shrink: 0;
-  border: 2px solid rgba(155,93,229,0.3);
+  border: 2px solid rgba(37,99,235,0.3);
 }
 
 .avatar-actions {
@@ -637,7 +642,7 @@ svg { display: block; width: 18px; height: 18px; flex-shrink: 0; }
   gap: 8px;
 }
 
-/* ══ SECURITY ═══════════════════════════════════════════════════════════════ */
+/* â•â• SECURITY â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .mfa-status {
   display: flex;
   align-items: center;
@@ -705,7 +710,7 @@ svg { display: block; width: 18px; height: 18px; flex-shrink: 0; }
   white-space: nowrap;
 }
 
-/* ══ NOTIFICATIONS ══════════════════════════════════════════════════════════ */
+/* â•â• NOTIFICATIONS â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .notif-header-row {
   display: flex;
   align-items: center;
@@ -794,7 +799,7 @@ svg { display: block; width: 18px; height: 18px; flex-shrink: 0; }
   justify-content: center;
 }
 
-/* ══ BILLING ════════════════════════════════════════════════════════════════ */
+/* â•â• BILLING â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .plan-card {
   display: flex;
   align-items: center;
@@ -929,7 +934,7 @@ svg { display: block; width: 18px; height: 18px; flex-shrink: 0; }
 
 .billing-table__amount { color: var(--text-primary); font-weight: 500; }
 
-/* ══ INTEGRATIONS ════════════════════════════════════════════════════════════ */
+/* â•â• INTEGRATIONS â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .integrations-list {
   display: flex;
   flex-direction: column;
@@ -1018,7 +1023,7 @@ svg { display: block; width: 18px; height: 18px; flex-shrink: 0; }
   color: var(--danger);
 }
 
-/* ══ DANGER ZONE ════════════════════════════════════════════════════════════ */
+/* â•â• DANGER ZONE â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .danger-item {
   display: flex;
   align-items: center;
@@ -1069,7 +1074,7 @@ svg { display: block; width: 18px; height: 18px; flex-shrink: 0; }
   font-size: 13px;
 }
 
-/* ══ RESPONSIVE ═════════════════════════════════════════════════════════════ */
+/* â•â• RESPONSIVE â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 @media (max-width: 900px) {
   .settings-subnav { display: none; }
   .settings-layout { padding: 20px 16px; }
