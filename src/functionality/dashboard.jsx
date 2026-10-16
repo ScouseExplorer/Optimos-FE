@@ -2,6 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Chart, registerables } from 'chart.js';
 import './dashboard.css';
 import InternalAppShell from '../layout/InternalAppShell.jsx';
+import { useSubscriptionData } from '../subscription/useSubscriptionData';
+import { useCreditsData } from '../credits/useCreditsData';
+import { useUsageData } from '../usage/useUsageData';
 
 Chart.register(...registerables);
 
@@ -54,6 +57,27 @@ const SUGGESTIONS = [
   { icon:'💡', iconBg:'rgba(255,190,11,.12)', iconBorder:'rgba(255,190,11,.25)', title:'Add 5 more skills',  desc:'Profiles with 10+ skills get 4× more views' },
   { icon:'✨', iconBg:'rgba(0,245,212,.10)',  iconBorder:'rgba(0,245,212,.25)',  title:'Rewrite your About', desc:'Yours is too short — aim for 250+ words' },
 ];
+
+const numberOrFallback = (value, fallback = 'N/A') => {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed.toLocaleString() : fallback;
+};
+
+const formatRecentUsage = (usageEntry) => {
+  if (!usageEntry) return 'No recent activity';
+
+  const status = usageEntry.status || 'unknown';
+  const creditsCharged = Number(usageEntry.credits_charged);
+  const tokensUsed = Number(usageEntry.tokens_used ?? usageEntry.tokens);
+
+  const usageText = Number.isFinite(creditsCharged)
+    ? `${creditsCharged.toLocaleString()} credits`
+    : Number.isFinite(tokensUsed)
+      ? `${tokensUsed.toLocaleString()} tokens`
+      : 'Activity logged';
+
+  return `${status} · ${usageText}`;
+};
 
 /* ══════════════════════════════════════════
    REACH CHART HOOK
@@ -184,6 +208,64 @@ function StatCards() {
           </div>
         </div>
       ))}
+    </div>
+  );
+}
+
+function AccountSummaryCards() {
+  const {
+    tier,
+    usageSummary,
+    isLoading: isSubscriptionLoading,
+  } = useSubscriptionData();
+  const {
+    creditsBalance,
+    isLoading: isCreditsLoading,
+  } = useCreditsData();
+  const {
+    items,
+    isLoading: isUsageLoading,
+  } = useUsageData(1);
+
+  const recentUsage = items[0] || null;
+
+  return (
+    <div className="stat-grid" aria-label="Account summary cards">
+      <article className="stat-card stat-card--cyan">
+        <div className="stat-card__label">Subscription</div>
+        <div className="stat-card__value stat-card__value--cyan">
+          {isSubscriptionLoading ? 'Loading...' : String(tier || 'free').toUpperCase()}
+        </div>
+        <div className="stat-card__change">
+          <span className="change__period">
+            {isSubscriptionLoading
+              ? 'Checking usage limits...'
+              : `${numberOrFallback(usageSummary.remaining)} / ${numberOrFallback(usageSummary.limit)} usage remaining`}
+          </span>
+        </div>
+      </article>
+
+      <article className="stat-card stat-card--violet">
+        <div className="stat-card__label">Credits</div>
+        <div className="stat-card__value stat-card__value--violet">
+          {isCreditsLoading ? 'Loading...' : numberOrFallback(creditsBalance)}
+        </div>
+        <div className="stat-card__change">
+          <span className="change__period">Current wallet balance</span>
+        </div>
+      </article>
+
+      <article className="stat-card stat-card--pink">
+        <div className="stat-card__label">Recent usage</div>
+        <div className="stat-card__value stat-card__value--pink">
+          {isUsageLoading ? 'Loading...' : (recentUsage?.status || 'No usage')}
+        </div>
+        <div className="stat-card__change">
+          <span className="change__period">
+            {isUsageLoading ? 'Fetching latest usage entry...' : formatRecentUsage(recentUsage)}
+          </span>
+        </div>
+      </article>
     </div>
   );
 }
@@ -368,6 +450,8 @@ export default function Dashboard() {
           </h1>
           <p className="greeting__sub">Here's your LinkedIn performance for the last 30 days.</p>
         </div>
+
+        <AccountSummaryCards />
 
         <StatCards />
 

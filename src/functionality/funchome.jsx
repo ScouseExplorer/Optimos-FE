@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './funchome.css';
 import InternalAppShell from '../layout/InternalAppShell.jsx';
+import { useSubscriptionData } from '../subscription/useSubscriptionData';
 
 const MODULES = [
     {
@@ -9,18 +10,21 @@ const MODULES = [
         description: 'Track profile reach, engagement, and growth trends in one place.',
         route: '/dashboard',
         badge: 'Live',
+        entitlementKey: 'advanced_analytics',
     },
     {
         title: 'Content Scheduler',
         description: 'Plan, draft, and schedule posts with queue controls and calendar view.',
         route: '/contentscheduler',
         badge: 'Core',
+        entitlementKey: 'content_scheduler',
     },
     {
         title: 'AI Chat Assistant',
         description: 'Generate hooks, rewrite posts, and brainstorm strategy prompts quickly.',
         route: '/aichat',
         badge: 'Beta',
+        entitlementKey: 'ai_chat',
     },
     {
         title: 'Account Settings',
@@ -28,10 +32,47 @@ const MODULES = [
         route: '/settings',
         badge: 'Admin',
     },
+    {
+        title: 'Subscription & Entitlements',
+        description: 'Check your tier, usage remaining, credits balance, and upgrade options.',
+        route: '/subscription',
+        badge: 'Plan',
+    },
+    {
+        title: 'Credits Wallet',
+        description: 'Track current credit balance, transaction ledger, and feature costs.',
+        route: '/credits',
+        badge: 'Billing',
+    },
+    {
+        title: 'AI Usage Logs',
+        description: 'Review generation status, token counts, and credits charged over time.',
+        route: '/usage',
+        badge: 'Logs',
+    },
+    {
+        title: 'Experiences Manager',
+        description: 'Create, edit, and remove your user-scoped experiences records.',
+        route: '/experiences',
+        badge: 'CRUD',
+    },
+    {
+        title: 'Opinions Manager',
+        description: 'Maintain your opinions dataset with paginated API-backed records.',
+        route: '/opinions',
+        badge: 'CRUD',
+    },
+    {
+        title: 'Posts Manager',
+        description: 'Manage posts directly through authenticated user post endpoints.',
+        route: '/posts',
+        badge: 'CRUD',
+    },
 ];
 
 export default function Functionality() {
     const navigate = useNavigate();
+    const { canUseFeature, isLoading } = useSubscriptionData();
 
     return (
         <InternalAppShell title="Profile" activeNav="profile">
@@ -47,14 +88,17 @@ export default function Functionality() {
 
                 <section className="funchome-grid" aria-label="App modules">
                     {MODULES.map(module => (
-                        <article key={module.title} className="funchome-card">
+                        <article key={module.title} className={`funchome-card${module.entitlementKey && !isLoading && !canUseFeature(module.entitlementKey) ? ' funchome-card--locked' : ''}`}>
                             <div className="funchome-card__top">
                                 <h2>{module.title}</h2>
-                                <span>{module.badge}</span>
+                                <span>{module.entitlementKey && !isLoading && !canUseFeature(module.entitlementKey) ? 'Locked' : module.badge}</span>
                             </div>
                             <p>{module.description}</p>
-                            <button onClick={() => navigate(module.route)} className="funchome-card__cta">
-                                Open module
+                            <button
+                                onClick={() => navigate(module.entitlementKey && !isLoading && !canUseFeature(module.entitlementKey) ? '/subscription' : module.route)}
+                                className="funchome-card__cta"
+                            >
+                                {module.entitlementKey && !isLoading && !canUseFeature(module.entitlementKey) ? 'Upgrade plan' : 'Open module'}
                             </button>
                         </article>
                     ))}

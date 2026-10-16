@@ -1,0 +1,132 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600&display=swap');
+
+.usage-page {
+  min-height: 100%;
+  padding: 2rem;
+  color: #17325c;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.usage-hero {
+  margin-bottom: 1.2rem;
+}
+
+.usage-kicker {
+  color: #0ea5e9;
+  text-transform: uppercase;
+  letter-spacing: .14em;
+  font-size: .72rem;
+}
+
+.usage-hero h1 {
+  margin: .5rem 0 .7rem;
+  line-height: .96;
+  font-family: 'Bebas Neue', sans-serif;
+  letter-spacing: .03em;
+  font-size: clamp(2.2rem, 4vw, 3.5rem);
+}
+
+.usage-hero p {
+  color: rgba(23, 50, 92, 0.76);
+  max-width: 760px;
+  line-height: 1.6;
+}
+
+.usage-error {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  border-radius: 12px;
+  border: 1px solid #f0c9cc;
+  background: #fff5f6;
+  color: #a12e3f;
+  padding: .75rem .95rem;
+  margin-bottom: 1rem;
+}
+
+.usage-error button,
+.usage-panel__head button,
+.usage-pagination button {
+  border: 1px solid rgba(37, 99, 235, 0.35);
+  background: #fff;
+  color: #17325c;
+  border-radius: 8px;
+  padding: .35rem .72rem;
+  cursor: pointer;
+}
+
+.usage-panel {
+  border: 1px solid rgba(37, 99, 235, 0.2);
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  padding: .95rem;
+}
+
+.usage-panel__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: .8rem;
+  margin-bottom: .7rem;
+}
+
+.usage-panel h2 {
+  margin: 0;
+  font-size: .82rem;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: rgba(23, 50, 92, 0.65);
+}
+
+.usage-muted {
+  margin: .2rem 0;
+  color: rgba(23, 50, 92, 0.72);
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 640px;
+}
+
+th,
+td {
+  text-align: left;
+  padding: .6rem .4rem;
+  border-bottom: 1px solid #dbe5f7;
+  font-size: .86rem;
+}
+
+th {
+  color: rgba(23, 50, 92, 0.7);
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  font-size: .72rem;
+}
+
+.usage-pagination {
+  margin-top: .8rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: .6rem;
+  color: rgba(23, 50, 92, 0.72);
+  font-size: .83rem;
+}
+
+.usage-pagination button:disabled,
+.usage-panel__head button:disabled {
+  opacity: .52;
+  cursor: not-allowed;
+}
+
+@media (max-width: 720px) {
+  .usage-page {
+    padding: 1rem;
+  }
+}

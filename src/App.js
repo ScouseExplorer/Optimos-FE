@@ -1,5 +1,5 @@
 import './App.css';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import ChatApp from './functionality/aichat.jsx';
 import Functionality from './functionality/funchome.jsx';
@@ -8,12 +8,25 @@ import Dashboard from './functionality/dashboard.jsx';
 import Settings from './functionality/settings.jsx';
 import ContentScheduler from './functionality/contentscheduler.jsx';
 import Onboarding from './functionality/onboarding.jsx';
+import SubscriptionPage from './functionality/subscription.jsx';
+import CreditsPage from './functionality/credits.jsx';
+import UsagePage from './functionality/usage.jsx';
+import ExperiencesPage from './functionality/experiences.jsx';
+import OpinionsPage from './functionality/opinions.jsx';
+import PostsPage from './functionality/posts.jsx';
 import AdminDashboard from'./admin/admindashboard.jsx';
+import Login from './Login/Login.jsx';
+import CreateAccount from './Login/createaccount.jsx';
+import { AuthProvider, useAuth } from './auth/AuthContext.jsx';
+import ProtectedRoute from './auth/ProtectedRoute.jsx';
+import NotAuthorized from './auth/NotAuthorized.jsx';
+import { apiClient } from './api/client';
  
 /* ─── Nav ─── */
 function Nav() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { isAuthenticated, isAdmin, logout } = useAuth();
 
   const jumpTo = sectionId => {
     if (location.pathname === '/') {
@@ -35,8 +48,25 @@ function Nav() {
         <li><button type="button" onClick={() => jumpTo('why')}>Why us</button></li>
         <li><button type="button" onClick={() => jumpTo('contact')}>Contact</button></li>
         <li><Link to="/onboarding">Onboarding</Link></li>
-        <li><Link to="/aichat" className="nav__cta">Get started</Link></li>
-        <li><Link to="/admin">Admin</Link></li>
+        <li>
+          <Link to={isAuthenticated ? '/dashboard' : '/login'} className="nav__cta">
+            {isAuthenticated ? 'Open app' : 'Get started'}
+          </Link>
+        </li>
+        {isAdmin && <li><Link to="/admin">Admin</Link></li>}
+        {isAuthenticated && (
+          <li>
+            <button
+              type="button"
+              onClick={async () => {
+                await logout();
+                navigate('/');
+              }}
+            >
+              Logout
+            </button>
+          </li>
+        )}
       </ul>
     </nav>
   );
@@ -307,27 +337,72 @@ function NotFound() {
 
 function AppRoutes() {
   const location = useLocation();
-  const isMarketingRoute = ['/', '/pricing', '/contact'].includes(location.pathname);
+  const { isAuthenticated } = useAuth();
+  const [rateLimitNotice, setRateLimitNotice] = useState(null);
+  const isMarketingRoute = ['/', '/pricing', '/contact', '/login', '/register'].includes(location.pathname);
+
+  useEffect(() => {
+    const unsubscribe = apiClient.rateLimit.subscribe((context) => {
+      if (!context || Number(context.status) !== 429) {
+        return;
+      }
+
+      const cooldownMs = Number(context.cooldownMs) > 0 ? Number(context.cooldownMs) : 5000;
+      const retryInSeconds = Math.ceil(cooldownMs / 1000);
+
+      setRateLimitNotice({
+        message: `Rate limit reached. Retry in ${retryInSeconds}s.`,
+        requestId: context.requestId || null,
+      });
+    });
+
+    return unsubscribe;
+  }, []);
+
+  useEffect(() => {
+    if (!rateLimitNotice) return;
+
+    const timeout = setTimeout(() => {
+      setRateLimitNotice(null);
+    }, 7000);
+
+    return () => clearTimeout(timeout);
+  }, [rateLimitNotice]);
 
   return (
     <>
+      {rateLimitNotice && (
+        <div className="rate-limit-banner" role="alert">
+          <span>{rateLimitNotice.message}</span>
+          {rateLimitNotice.requestId && <span className="rate-limit-banner__id">Request ID: {rateLimitNotice.requestId}</span>}
+        </div>
+      )}
       {isMarketingRoute && <Nav />}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/pricing" element={<Pricing />} />
-        <Route path="/aichat" element={<ChatApp />} />
-        <Route path="/funchome" element={<Functionality />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/onboarding" element={<Onboarding />} />
-        <Route path="/contentscheduler" element={<ContentScheduler />} />
+        <Route path="/login" element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <Login />} />
+        <Route path="/register" element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <CreateAccount />} />
+        <Route path="/aichat" element={<ProtectedRoute><ChatApp /></ProtectedRoute>} />
+        <Route path="/funchome" element={<ProtectedRoute><Functionality /></ProtectedRoute>} />
+        <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+        <Route path="/onboarding" element={<ProtectedRoute><Onboarding /></ProtectedRoute>} />
+        <Route path="/contentscheduler" element={<ProtectedRoute><ContentScheduler /></ProtectedRoute>} />
         <Route path="/content" element={<Navigate to="/contentscheduler" replace />} />
         <Route path="/scheduler" element={<Navigate to="/contentscheduler" replace />} />
         <Route path="/profile" element={<Navigate to="/funchome" replace />} />
         <Route path="/analytics" element={<Navigate to="/dashboard" replace />} />
         <Route path="/connections" element={<Navigate to="/funchome" replace />} />
-        <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/admin" element={<ProtectedRoute requireAdmin><AdminDashboard /></ProtectedRoute>} />
+        <Route path="/not-authorized" element={<NotAuthorized />} />
         <Route path="/contact" element={<Contact />} />
-        <Route path="/settings" element={<Settings />} />
+        <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+        <Route path="/subscription" element={<ProtectedRoute><SubscriptionPage /></ProtectedRoute>} />
+        <Route path="/credits" element={<ProtectedRoute><CreditsPage /></ProtectedRoute>} />
+        <Route path="/usage" element={<ProtectedRoute><UsagePage /></ProtectedRoute>} />
+        <Route path="/experiences" element={<ProtectedRoute><ExperiencesPage /></ProtectedRoute>} />
+        <Route path="/opinions" element={<ProtectedRoute><OpinionsPage /></ProtectedRoute>} />
+        <Route path="/posts" element={<ProtectedRoute><PostsPage /></ProtectedRoute>} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>
@@ -337,8 +412,10 @@ function AppRoutes() {
 /* ─── Root ─── */
 export default function App() {
   return (
-    <Router>
-      <AppRoutes />
-    </Router>
+    <AuthProvider>
+      <Router>
+        <AppRoutes />
+      </Router>
+    </AuthProvider>
   );
 }

@@ -51,6 +51,11 @@
   gap: .9rem;
 }
 
+.funchome-card--locked {
+  border-color: rgba(249, 115, 22, 0.45);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.97), rgba(249, 115, 22, 0.08));
+}
+
 .funchome-card__top {
   display: flex;
   justify-content: space-between;

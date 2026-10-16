@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   Bell,
   ChartLine,
@@ -10,7 +10,12 @@ import {
   User,
   X,
   CalendarDays,
+  Wallet,
+  Briefcase,
+  MessageSquare,
+  FileText,
 } from 'lucide-react';
+import { useAuth } from '../auth/AuthContext';
 import './internal-app-shell.css';
 
 const NAV_ITEMS = [
@@ -19,6 +24,12 @@ const NAV_ITEMS = [
   { id: 'content', label: 'Content', route: '/contentscheduler', icon: CalendarDays, badge: '3' },
   { id: 'analytics', label: 'Analytics', route: '/dashboard', icon: ChartLine },
   { id: 'aichat', label: 'AI Chat', route: '/aichat', icon: MessageCircle },
+  { id: 'experiences', label: 'Experiences', route: '/experiences', icon: Briefcase },
+  { id: 'opinions', label: 'Opinions', route: '/opinions', icon: MessageSquare },
+  { id: 'posts', label: 'Posts', route: '/posts', icon: FileText },
+  { id: 'credits', label: 'Credits', route: '/credits', icon: Wallet },
+  { id: 'usage', label: 'Usage', route: '/usage', icon: ChartLine },
+  { id: 'subscription', label: 'Subscription', route: '/subscription', icon: Wallet },
   { id: 'settings', label: 'Settings', route: '/settings', icon: Settings },
 ];
 
@@ -47,6 +58,8 @@ function SidebarLinks({ activeNav, onNavigate }) {
 export default function InternalAppShell({ title, activeNav, children }) {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { logout } = useAuth();
 
   const resolvedTitle = useMemo(() => {
     if (title) return title;
@@ -78,6 +91,16 @@ export default function InternalAppShell({ title, activeNav, children }) {
           <h1>{resolvedTitle}</h1>
 
           <div className="internal-shell__topbar-actions">
+            <button
+              type="button"
+              className="internal-shell__logout-btn"
+              onClick={async () => {
+                await logout();
+                navigate('/login', { replace: true });
+              }}
+            >
+              Logout
+            </button>
             <button type="button" className="internal-shell__icon-btn" aria-label="Notifications">
               <Bell size={16} />
               <span className="internal-shell__notif-dot" />

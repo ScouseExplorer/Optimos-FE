@@ -23,6 +23,31 @@ body {
   color: #17325c;
   overflow-x: hidden;
 }
+
+.rate-limit-banner {
+  position: fixed;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: .9rem;
+  max-width: min(92vw, 720px);
+  border: 1px solid rgba(255, 190, 11, 0.55);
+  background: #fff8e9;
+  color: #8b4f04;
+  border-radius: 11px;
+  padding: .62rem .9rem;
+  box-shadow: 0 14px 40px rgba(23, 50, 92, 0.18);
+}
+
+.rate-limit-banner__id {
+  color: rgba(139, 79, 4, 0.82);
+  font-size: .82rem;
+  border-left: 1px solid rgba(139, 79, 4, 0.25);
+  padding-left: .7rem;
+}
  
 /* animated mesh */
 body::after {

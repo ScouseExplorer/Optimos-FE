@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import "./settings.css";
 import InternalAppShell from "../layout/InternalAppShell.jsx";
+import { userService } from "../api/userService";
+import { healthService } from "../api/healthService";
 
 // ── Icons (inline SVG to keep zero-dependency) ──────────────────────────────
 const Icon = ({ name }) => {
@@ -93,6 +95,12 @@ const Icon = ({ name }) => {
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
         <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
         <line x1="12" y1="9" x2="12" y2="13" /><line x1="12" y1="17" x2="12.01" y2="17" />
+      </svg>
+    ),
+    pulse: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+        <path d="M3 12h4l2.2-4.5L14 17l2.2-5H21" />
+        <path d="M5 5h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z" />
       </svg>
     ),
     linkedin: (
@@ -237,6 +245,217 @@ export default function Settings() {
 
   // ── Danger state ──
   const [deleteInput, setDeleteInput] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState("");
+  const [saveStatus, setSaveStatus] = useState({
+    profile: { loading: false, error: "", success: "" },
+    notifications: { loading: false, error: "", success: "" },
+    security: { loading: false, error: "", success: "" },
+  });
+  const [healthState, setHealthState] = useState({
+    loading: false,
+    error: "",
+    overall: "unknown",
+    healthyCount: 0,
+    total: 0,
+    checks: [],
+    checkedAt: "",
+  });
+
+  const initials = useMemo(() => {
+    const source = account.fullName || account.username || "AM";
+    const parts = source.trim().split(/\s+/).filter(Boolean);
+    if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+    return `${parts[0][0] || ""}${parts[1][0] || ""}`.toUpperCase();
+  }, [account.fullName, account.username]);
+
+  useEffect(() => {
+    let active = true;
+
+    const loadSettings = async () => {
+      setIsLoading(true);
+      setLoadError("");
+
+      try {
+        const [me, profile, notifications, security] = await Promise.all([
+          userService.getMe(),
+          userService.getMyProfile(),
+          userService.getMyNotifications(),
+          userService.getMySecurity(),
+        ]);
+
+        if (!active) return;
+
+        setAccount(prev => ({
+          ...prev,
+          fullName: profile?.full_name || me?.full_name || me?.name || prev.fullName,
+          username: profile?.username || me?.username || prev.username,
+          email: profile?.email || me?.email || prev.email,
+          bio: profile?.bio || prev.bio,
+          timezone: profile?.timezone || prev.timezone,
+        }));
+
+        if (notifications) {
+          setNotifs(prev => ({
+            ...prev,
+            newFollower: {
+              email: notifications?.new_follower_email ?? prev.newFollower.email,
+              push: notifications?.new_follower_push ?? prev.newFollower.push,
+            },
+            connectionReq: {
+              email: notifications?.connection_request_email ?? prev.connectionReq.email,
+              push: notifications?.connection_request_push ?? prev.connectionReq.push,
+            },
+            postEngagement: {
+              email: notifications?.post_engagement_email ?? prev.postEngagement.email,
+              push: notifications?.post_engagement_push ?? prev.postEngagement.push,
+            },
+            aiInsights: {
+              email: notifications?.ai_insights_email ?? prev.aiInsights.email,
+              push: notifications?.ai_insights_push ?? prev.aiInsights.push,
+            },
+            weeklyReport: {
+              email: notifications?.weekly_report_email ?? prev.weeklyReport.email,
+              push: notifications?.weekly_report_push ?? prev.weeklyReport.push,
+            },
+            billing: {
+              email: notifications?.billing_email ?? prev.billing.email,
+              push: notifications?.billing_push ?? prev.billing.push,
+            },
+            security: {
+              email: notifications?.security_email ?? prev.security.email,
+              push: notifications?.security_push ?? prev.security.push,
+            },
+          }));
+        }
+
+        if (security) {
+          setMfaEnabled(security?.mfa_enabled ?? true);
+          setSessionAlerts(security?.session_alerts ?? true);
+        }
+      } catch (error) {
+        if (!active) return;
+        setLoadError(error?.message || "Failed to load your settings.");
+      } finally {
+        if (active) setIsLoading(false);
+      }
+    };
+
+    loadSettings();
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const loadHealthDiagnostics = async () => {
+    setHealthState(prev => ({ ...prev, loading: true, error: "" }));
+    try {
+      const result = await healthService.checkAll();
+      setHealthState({
+        loading: false,
+        error: "",
+        overall: result.overall,
+        healthyCount: result.healthyCount,
+        total: result.total,
+        checks: result.checks,
+        checkedAt: result.checkedAt,
+      });
+    } catch (error) {
+      setHealthState(prev => ({
+        ...prev,
+        loading: false,
+        error: error?.message || "Failed to load backend diagnostics.",
+      }));
+    }
+  };
+
+  useEffect(() => {
+    loadHealthDiagnostics();
+  }, []);
+
+  const healthSummaryLabel =
+    healthState.overall === "healthy"
+      ? "All systems operational"
+      : healthState.overall === "degraded"
+        ? "Some endpoints are degraded"
+        : healthState.overall === "offline"
+          ? "Backend appears unavailable"
+          : "Status unknown";
+
+  const checkedAtLabel = healthState.checkedAt
+    ? new Date(healthState.checkedAt).toLocaleString()
+    : "Not checked yet";
+
+  const setSectionStatus = (section, state) => {
+    setSaveStatus(prev => ({
+      ...prev,
+      [section]: { ...prev[section], ...state },
+    }));
+  };
+
+  const saveProfile = async () => {
+    setSectionStatus("profile", { loading: true, error: "", success: "" });
+    try {
+      await userService.updateMyProfile({
+        full_name: account.fullName,
+        username: account.username,
+        email: account.email,
+        bio: account.bio,
+        timezone: account.timezone,
+      });
+      setSectionStatus("profile", { loading: false, success: "Profile updated." });
+    } catch (error) {
+      setSectionStatus("profile", {
+        loading: false,
+        error: error?.message || "Failed to save profile.",
+      });
+    }
+  };
+
+  const saveNotifications = async () => {
+    setSectionStatus("notifications", { loading: true, error: "", success: "" });
+    try {
+      await userService.updateMyNotifications({
+        new_follower_email: notifs.newFollower.email,
+        new_follower_push: notifs.newFollower.push,
+        connection_request_email: notifs.connectionReq.email,
+        connection_request_push: notifs.connectionReq.push,
+        post_engagement_email: notifs.postEngagement.email,
+        post_engagement_push: notifs.postEngagement.push,
+        ai_insights_email: notifs.aiInsights.email,
+        ai_insights_push: notifs.aiInsights.push,
+        weekly_report_email: notifs.weeklyReport.email,
+        weekly_report_push: notifs.weeklyReport.push,
+        billing_email: notifs.billing.email,
+        billing_push: notifs.billing.push,
+        security_email: notifs.security.email,
+        security_push: notifs.security.push,
+      });
+      setSectionStatus("notifications", { loading: false, success: "Notification preferences saved." });
+    } catch (error) {
+      setSectionStatus("notifications", {
+        loading: false,
+        error: error?.message || "Failed to save notification preferences.",
+      });
+    }
+  };
+
+  const saveSecurity = async () => {
+    setSectionStatus("security", { loading: true, error: "", success: "" });
+    try {
+      await userService.updateMySecurity({
+        mfa_enabled: mfaEnabled,
+        session_alerts: sessionAlerts,
+      });
+      setSectionStatus("security", { loading: false, success: "Security settings updated." });
+    } catch (error) {
+      setSectionStatus("security", {
+        loading: false,
+        error: error?.message || "Failed to save security settings.",
+      });
+    }
+  };
 
   const settingsNav = [
     { href: "#account",       label: "Account"       },
@@ -244,6 +463,7 @@ export default function Settings() {
     { href: "#notifications", label: "Notifications" },
     { href: "#billing",       label: "Billing"       },
     { href: "#integrations",  label: "Integrations"  },
+    { href: "#diagnostics",   label: "Diagnostics"   },
     { href: "#danger",        label: "Danger Zone"   },
   ];
 
@@ -251,6 +471,14 @@ export default function Settings() {
     <InternalAppShell title="Settings" activeNav="settings">
       <div className="settings-page">
         <div className="settings-layout">
+          {isLoading && (
+            <div className="settings-api-message settings-api-message--loading">Loading your settings...</div>
+          )}
+          {loadError && (
+            <div className="settings-api-message settings-api-message--error">
+              {loadError}
+            </div>
+          )}
           {/* In-page nav */}
           <aside className="settings-subnav">
             <span className="settings-subnav__label">Jump to</span>
@@ -269,9 +497,9 @@ export default function Settings() {
           <div className="settings-sections">
 
             {/* ── ACCOUNT ─────────────────────────────────────────── */}
-            <Section id="account" icon="profile" label="Account" accent="cyan">
+            <Section id="account" icon="profile" label="Personal profile" accent="cyan">
               <div className="avatar-row">
-                <div className="avatar-preview">AM</div>
+                <div className="avatar-preview">{initials}</div>
                 <div className="avatar-actions">
                   <button className="btn btn--ghost btn--sm">Upload photo</button>
                   <button className="btn btn--text btn--sm">Remove</button>
@@ -329,13 +557,17 @@ export default function Settings() {
               </Field>
 
               <div className="section-actions">
-                <button className="btn btn--primary">Save changes</button>
+                <button className="btn btn--primary" onClick={saveProfile} disabled={saveStatus.profile.loading}>
+                  {saveStatus.profile.loading ? "Saving..." : "Save changes"}
+                </button>
                 <button className="btn btn--ghost">Cancel</button>
               </div>
+              {saveStatus.profile.error && <p className="settings-inline-status settings-inline-status--error">{saveStatus.profile.error}</p>}
+              {saveStatus.profile.success && <p className="settings-inline-status settings-inline-status--success">{saveStatus.profile.success}</p>}
             </Section>
 
             {/* ── SECURITY ────────────────────────────────────────── */}
-            <Section id="security" icon="shield" label="Security" accent="violet">
+            <Section id="security" icon="shield" label="Security settings" accent="violet">
               <div className="subsection">
                 <h3 className="subsection__title">Change password</h3>
                 <div className="field-grid">
@@ -357,7 +589,9 @@ export default function Settings() {
                   </Field>
                 </div>
                 <div className="section-actions">
-                  <button className="btn btn--primary btn--violet">Update password</button>
+                  <button className="btn btn--primary btn--violet" onClick={saveSecurity} disabled={saveStatus.security.loading}>
+                    {saveStatus.security.loading ? "Saving..." : "Update security settings"}
+                  </button>
                 </div>
               </div>
 
@@ -405,11 +639,13 @@ export default function Settings() {
                   </div>
                   <Toggle checked={sessionAlerts} onChange={setSessionAlerts} accent="violet" />
                 </div>
+                {saveStatus.security.error && <p className="settings-inline-status settings-inline-status--error">{saveStatus.security.error}</p>}
+                {saveStatus.security.success && <p className="settings-inline-status settings-inline-status--success">{saveStatus.security.success}</p>}
               </div>
             </Section>
 
             {/* ── NOTIFICATIONS ───────────────────────────────────── */}
-            <Section id="notifications" icon="bell" label="Notifications" accent="pink">
+            <Section id="notifications" icon="bell" label="Notification preferences" accent="pink">
               <div className="notif-header-row">
                 <span />
                 <div className="notif-col-labels">
@@ -459,8 +695,12 @@ export default function Settings() {
               </div>
 
               <div className="section-actions">
-                <button className="btn btn--primary btn--pink">Save preferences</button>
+                <button className="btn btn--primary btn--pink" onClick={saveNotifications} disabled={saveStatus.notifications.loading}>
+                  {saveStatus.notifications.loading ? "Saving..." : "Save preferences"}
+                </button>
               </div>
+              {saveStatus.notifications.error && <p className="settings-inline-status settings-inline-status--error">{saveStatus.notifications.error}</p>}
+              {saveStatus.notifications.success && <p className="settings-inline-status settings-inline-status--success">{saveStatus.notifications.success}</p>}
             </Section>
 
             {/* ── BILLING ─────────────────────────────────────────── */}
@@ -561,6 +801,58 @@ export default function Settings() {
                   connected={integrations.slack}
                   onToggle={() => toggleIntegration("slack")}
                 />
+              </div>
+            </Section>
+
+            {/* ── DIAGNOSTICS ────────────────────────────────────── */}
+            <Section id="diagnostics" icon="pulse" label="Backend diagnostics" accent="violet">
+              <p className="section-intro">
+                Public bootstrapping checks for API root and health probes.
+              </p>
+
+              <div className="diagnostics-summary">
+                <div className={`diagnostics-overall diagnostics-overall--${healthState.overall}`}>
+                  <span className="diagnostics-overall__dot" />
+                  <div className="diagnostics-overall__text">
+                    <strong>{healthSummaryLabel}</strong>
+                    <span>
+                      {healthState.healthyCount}/{healthState.total || healthService.endpoints.length} endpoints healthy
+                    </span>
+                  </div>
+                </div>
+                <button
+                  className="btn btn--ghost btn--sm"
+                  onClick={loadHealthDiagnostics}
+                  disabled={healthState.loading}
+                >
+                  {healthState.loading ? "Refreshing..." : "Refresh checks"}
+                </button>
+              </div>
+
+              <div className="diagnostics-meta">Last checked: {checkedAtLabel}</div>
+              {healthState.error && (
+                <p className="settings-inline-status settings-inline-status--error">{healthState.error}</p>
+              )}
+
+              <div className="diagnostics-list">
+                {(healthState.checks.length ? healthState.checks : healthService.endpoints).map((check) => (
+                  <div className="diagnostics-item" key={check.key || check.path}>
+                    <div className="diagnostics-item__path">
+                      <span className={`diagnostics-chip ${check.ok ? "diagnostics-chip--ok" : "diagnostics-chip--fail"}`}>
+                        {check.ok ? "UP" : "DOWN"}
+                      </span>
+                      <strong>{check.path}</strong>
+                    </div>
+                    <div className="diagnostics-item__detail">
+                      <span>{check.label}</span>
+                      <span>
+                        {check.status ? `HTTP ${check.status}` : "No response"}
+                        {typeof check.durationMs === "number" ? ` · ${check.durationMs}ms` : ""}
+                      </span>
+                    </div>
+                    {check.detail && <div className="diagnostics-item__message">{check.detail}</div>}
+                  </div>
+                ))}
               </div>
             </Section>
 

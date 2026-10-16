@@ -18,8 +18,13 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "typecheck": "tsc --noEmit -p tsconfig.typecheck.json",
+    "ci:verify": "npm run typecheck && npm run build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "typescript": "^4.9.5"
   },
   "eslintConfig": {
     "extends": [
